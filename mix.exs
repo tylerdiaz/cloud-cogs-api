@@ -2,7 +2,7 @@ defmodule CloudCogs.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :cloug_cogs,
+    [app: :cloud_cogs,
      version: "0.0.1",
      elixir: "~> 1.2",
      elixirc_paths: elixirc_paths(Mix.env),

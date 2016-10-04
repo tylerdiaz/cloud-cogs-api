@@ -20,5 +20,5 @@ defmodule CloudCogs.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext, otp_app: :cloug_cogs
+  use Gettext, otp_app: :cloud_cogs
 end

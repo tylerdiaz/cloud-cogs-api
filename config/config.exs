@@ -6,11 +6,11 @@
 use Mix.Config
 
 # General application configuration
-config :cloug_cogs,
+config :cloud_cogs,
   ecto_repos: [CloudCogs.Repo]
 
 # Configures the endpoint
-config :cloug_cogs, CloudCogs.Endpoint,
+config :cloud_cogs, CloudCogs.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "scO/HI+QRGfSZQIgKNvNGcP/43wmQkRFKdYBlxclGGM1l0/Q3+21iFKbdMuow3kc",
   render_errors: [view: CloudCogs.ErrorView, accepts: ~w(json)],

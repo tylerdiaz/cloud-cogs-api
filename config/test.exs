@@ -2,7 +2,7 @@ use Mix.Config
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
-config :cloug_cogs, CloudCogs.Endpoint,
+config :cloud_cogs, CloudCogs.Endpoint,
   http: [port: 4001],
   server: false
 
@@ -10,10 +10,10 @@ config :cloug_cogs, CloudCogs.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :cloug_cogs, CloudCogs.Repo,
+config :cloud_cogs, CloudCogs.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "cloug_cogs_test",
+  database: "cloud_cogs_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
