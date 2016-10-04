@@ -7,5 +7,6 @@ defmodule ClougCogs.Router do
 
   scope "/api", ClougCogs do
     pipe_through :api
+    resources "/users", UserController, except: [:new, :edit]
   end
 end
