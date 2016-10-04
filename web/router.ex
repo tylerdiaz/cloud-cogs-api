@@ -1,12 +1,13 @@
-defmodule ClougCogs.Router do
-  use ClougCogs.Web, :router
+defmodule CloudCogs.Router do
+  use CloudCogs.Web, :router
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/api", ClougCogs do
+  scope "/api", CloudCogs do
     pipe_through :api
+
     resources "/users", UserController, except: [:new, :edit]
   end
 end

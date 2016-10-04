@@ -1,4 +1,4 @@
-defmodule ClougCogs.Repo.Migrations.CreateUser do
+defmodule CloudCogs.Repo.Migrations.CreateUser do
   use Ecto.Migration
 
   def change do

@@ -7,14 +7,14 @@ use Mix.Config
 
 # General application configuration
 config :cloug_cogs,
-  ecto_repos: [ClougCogs.Repo]
+  ecto_repos: [CloudCogs.Repo]
 
 # Configures the endpoint
-config :cloug_cogs, ClougCogs.Endpoint,
+config :cloug_cogs, CloudCogs.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "scO/HI+QRGfSZQIgKNvNGcP/43wmQkRFKdYBlxclGGM1l0/Q3+21iFKbdMuow3kc",
-  render_errors: [view: ClougCogs.ErrorView, accepts: ~w(json)],
-  pubsub: [name: ClougCogs.PubSub,
+  render_errors: [view: CloudCogs.ErrorView, accepts: ~w(json)],
+  pubsub: [name: CloudCogs.PubSub,
            adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger

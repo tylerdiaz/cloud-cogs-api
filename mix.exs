@@ -1,4 +1,4 @@
-defmodule ClougCogs.Mixfile do
+defmodule CloudCogs.Mixfile do
   use Mix.Project
 
   def project do
@@ -17,8 +17,8 @@ defmodule ClougCogs.Mixfile do
   #
   # Type `mix help compile.app` for more information.
   def application do
-    [mod: {ClougCogs, []},
-     applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext,
+    [mod: {CloudCogs, []},
+     applications: [:phoenix, :phoenix_pubsub, :cowboy, :comeonin, :logger, :gettext,
                     :phoenix_ecto, :postgrex]]
   end
 
@@ -33,6 +33,7 @@ defmodule ClougCogs.Mixfile do
     [{:phoenix, "~> 1.2.1"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
+     {:comeonin, "~> 2.5"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"}]

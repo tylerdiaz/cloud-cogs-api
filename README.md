@@ -1,4 +1,4 @@
-# ClougCogs
+# CloudCogs
 
 To start your Phoenix app:
 

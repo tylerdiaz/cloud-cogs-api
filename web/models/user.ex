@@ -1,5 +1,5 @@
-defmodule ClougCogs.User do
-  use ClougCogs.Web, :model
+defmodule CloudCogs.User do
+  use CloudCogs.Web, :model
 
   schema "users" do
     field :email, :string

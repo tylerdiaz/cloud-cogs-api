@@ -1,4 +1,3 @@
 ExUnit.start
 
-Ecto.Adapters.SQL.Sandbox.mode(ClougCogs.Repo, :manual)
-
+Ecto.Adapters.SQL.Sandbox.mode(CloudCogs.Repo, :manual)

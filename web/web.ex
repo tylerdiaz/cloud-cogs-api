@@ -1,12 +1,12 @@
-defmodule ClougCogs.Web do
+defmodule CloudCogs.Web do
   @moduledoc """
   A module that keeps using definitions for controllers,
   views and so on.
 
   This can be used in your application as:
 
-      use ClougCogs.Web, :controller
-      use ClougCogs.Web, :view
+      use CloudCogs.Web, :controller
+      use CloudCogs.Web, :view
 
   The definitions below will be executed for every view,
   controller, etc, so keep them short and clean, focused
@@ -30,12 +30,12 @@ defmodule ClougCogs.Web do
     quote do
       use Phoenix.Controller
 
-      alias ClougCogs.Repo
+      alias CloudCogs.Repo
       import Ecto
       import Ecto.Query
 
-      import ClougCogs.Router.Helpers
-      import ClougCogs.Gettext
+      import CloudCogs.Router.Helpers
+      import CloudCogs.Gettext
     end
   end
 
@@ -46,9 +46,9 @@ defmodule ClougCogs.Web do
       # Import convenience functions from controllers
       import Phoenix.Controller, only: [get_csrf_token: 0, get_flash: 2, view_module: 1]
 
-      import ClougCogs.Router.Helpers
-      import ClougCogs.ErrorHelpers
-      import ClougCogs.Gettext
+      import CloudCogs.Router.Helpers
+      import CloudCogs.ErrorHelpers
+      import CloudCogs.Gettext
     end
   end
 
@@ -62,10 +62,10 @@ defmodule ClougCogs.Web do
     quote do
       use Phoenix.Channel
 
-      alias ClougCogs.Repo
+      alias CloudCogs.Repo
       import Ecto
       import Ecto.Query
-      import ClougCogs.Gettext
+      import CloudCogs.Gettext
     end
   end
 

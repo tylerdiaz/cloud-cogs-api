@@ -1,7 +1,7 @@
-defmodule ClougCogs.UserControllerTest do
-  use ClougCogs.ConnCase
+defmodule CloudCogs.UserControllerTest do
+  use CloudCogs.ConnCase
 
-  alias ClougCogs.User
+  alias CloudCogs.User
   @valid_attrs %{email: "some content", encrypted_password: "some content", username: "some content"}
   @invalid_attrs %{}
 

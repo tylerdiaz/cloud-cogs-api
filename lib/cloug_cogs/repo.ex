@@ -1,3 +1,3 @@
-defmodule ClougCogs.Repo do
+defmodule CloudCogs.Repo do
   use Ecto.Repo, otp_app: :cloug_cogs
 end

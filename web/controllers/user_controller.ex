@@ -1,7 +1,7 @@
-defmodule ClougCogs.UserController do
-  use ClougCogs.Web, :controller
+defmodule CloudCogs.UserController do
+  use CloudCogs.Web, :controller
 
-  alias ClougCogs.User
+  alias CloudCogs.User
 
   def index(conn, _params) do
     users = Repo.all(User)
@@ -20,7 +20,7 @@ defmodule ClougCogs.UserController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(ClougCogs.ChangesetView, "error.json", changeset: changeset)
+        |> render(CloudCogs.ChangesetView, "error.json", changeset: changeset)
     end
   end
 
@@ -39,7 +39,7 @@ defmodule ClougCogs.UserController do
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render(ClougCogs.ChangesetView, "error.json", changeset: changeset)
+        |> render(CloudCogs.ChangesetView, "error.json", changeset: changeset)
     end
   end
 

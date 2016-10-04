@@ -1,4 +1,4 @@
-defmodule ClougCogs.ChannelCase do
+defmodule CloudCogs.ChannelCase do
   @moduledoc """
   This module defines the test case to be used by
   channel tests.
@@ -20,22 +20,22 @@ defmodule ClougCogs.ChannelCase do
       # Import conveniences for testing with channels
       use Phoenix.ChannelTest
 
-      alias ClougCogs.Repo
+      alias CloudCogs.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
 
 
       # The default endpoint for testing
-      @endpoint ClougCogs.Endpoint
+      @endpoint CloudCogs.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ClougCogs.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(CloudCogs.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(ClougCogs.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(CloudCogs.Repo, {:shared, self()})
     end
 
     :ok

@@ -1,7 +1,7 @@
-defmodule ClougCogs.Endpoint do
+defmodule CloudCogs.Endpoint do
   use Phoenix.Endpoint, otp_app: :cloug_cogs
 
-  socket "/socket", ClougCogs.UserSocket
+  socket "/socket", CloudCogs.UserSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -36,5 +36,5 @@ defmodule ClougCogs.Endpoint do
     key: "_cloug_cogs_key",
     signing_salt: "30u7gkxx"
 
-  plug ClougCogs.Router
+  plug CloudCogs.Router
 end

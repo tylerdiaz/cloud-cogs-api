@@ -1,5 +1,5 @@
-defmodule ClougCogs.ErrorView do
-  use ClougCogs.Web, :view
+defmodule CloudCogs.ErrorView do
+  use CloudCogs.Web, :view
 
   def render("404.json", _assigns) do
     %{errors: %{detail: "Page not found"}}

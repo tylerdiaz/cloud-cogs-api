@@ -1,7 +1,7 @@
-defmodule ClougCogs.UserTest do
-  use ClougCogs.ModelCase
+defmodule CloudCogs.UserTest do
+  use CloudCogs.ModelCase
 
-  alias ClougCogs.User
+  alias CloudCogs.User
 
   @valid_attrs %{email: "some content", encrypted_password: "some content", username: "some content"}
   @invalid_attrs %{}

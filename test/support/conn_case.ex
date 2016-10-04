@@ -1,4 +1,4 @@
-defmodule ClougCogs.ConnCase do
+defmodule CloudCogs.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -20,23 +20,23 @@ defmodule ClougCogs.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      alias ClougCogs.Repo
+      alias CloudCogs.Repo
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
 
-      import ClougCogs.Router.Helpers
+      import CloudCogs.Router.Helpers
 
       # The default endpoint for testing
-      @endpoint ClougCogs.Endpoint
+      @endpoint CloudCogs.Endpoint
     end
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(ClougCogs.Repo)
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(CloudCogs.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(ClougCogs.Repo, {:shared, self()})
+      Ecto.Adapters.SQL.Sandbox.mode(CloudCogs.Repo, {:shared, self()})
     end
 
     {:ok, conn: Phoenix.ConnTest.build_conn()}
