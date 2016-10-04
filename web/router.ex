@@ -8,6 +8,6 @@ defmodule CloudCogs.Router do
   scope "/api", CloudCogs do
     pipe_through :api
 
-    resources "/users", UserController, except: [:new, :edit]
+    resources "/users", UserController, only: [:create]
   end
 end

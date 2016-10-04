@@ -10,9 +10,10 @@ defmodule CloudCogs.UserView do
   end
 
   def render("user.json", %{user: user}) do
-    %{id: user.id,
+    %{
+      id: user.id,
       email: user.email,
-      username: user.username,
-      encrypted_password: user.encrypted_password}
+      username: user.username
+    }
   end
 end

@@ -1,6 +1,8 @@
 defmodule CloudCogs.User do
   use CloudCogs.Web, :model
 
+  @derive { Poison.Encoder, only: [:id, :username] }
+
   schema "users" do
     field :email, :string
     field :username, :string
@@ -9,6 +11,7 @@ defmodule CloudCogs.User do
 
     timestamps()
   end
+
 
   @doc """
   Builds a changeset based on the `struct` and `params`.
@@ -19,6 +22,7 @@ defmodule CloudCogs.User do
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 5)
     |> validate_required([:email, :username, :password])
+    |> unique_constraint(:username)
     |> unique_constraint(:email)
     |> generate_encrypted_password
   end
