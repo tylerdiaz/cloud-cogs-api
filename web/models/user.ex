@@ -27,6 +27,13 @@ defmodule CloudCogs.User do
     |> generate_encrypted_password
   end
 
+  def verify_password(user, password) do
+    case user do
+      nil -> false
+      _ -> Comeonin.Bcrypt.checkpw(password, user.encrypted_password)
+    end
+  end
+
   defp generate_encrypted_password(current_changeset) do
     case current_changeset do
       %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
@@ -35,4 +42,5 @@ defmodule CloudCogs.User do
         current_changeset
     end
   end
+
 end

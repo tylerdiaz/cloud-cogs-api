@@ -3,11 +3,17 @@ defmodule CloudCogs.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug Guardian.Plug.VerifyHeader
+    plug Guardian.Plug.LoadResource
   end
 
   scope "/api", CloudCogs do
     pipe_through :api
 
-    resources "/users", UserController, only: [:create]
+    scope "/v1" do
+      resources "/users", UserController, only: [:create]
+      post "/sessions", SessionController, :create
+    end
   end
 end

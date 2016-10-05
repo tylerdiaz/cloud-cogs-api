@@ -7,4 +7,12 @@ defmodule CloudCogs.SessionView do
       user: user
     }
   end
+
+  def forbidden("forbidden.json", err) do
+    err
+  end
+
+  def error("error.json", _) do
+    %{error: "Invalid username or password"}
+  end
 end
