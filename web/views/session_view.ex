@@ -8,11 +8,11 @@ defmodule CloudCogs.SessionView do
     }
   end
 
-  def forbidden("forbidden.json", err) do
+  def render("forbidden.json", err) do
     err
   end
 
-  def error("error.json", _) do
+  def render("error.json", _) do
     %{error: "Invalid username or password"}
   end
 end
