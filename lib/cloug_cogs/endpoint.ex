@@ -36,5 +36,6 @@ defmodule CloudCogs.Endpoint do
     key: "_cloud_cogs_key",
     signing_salt: "30u7gkxx"
 
+  plug Corsica, origins: "*", allow_headers: ~w(content-type)
   plug CloudCogs.Router
 end
