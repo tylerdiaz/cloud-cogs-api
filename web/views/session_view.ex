@@ -3,8 +3,11 @@ defmodule CloudCogs.SessionView do
 
   def render("show.json", %{jwt: jwt, user: user}) do
     %{
-      jwt: jwt,
-      user: user
+      user: %{
+        jwt: jwt,
+        id: user.id,
+        username: user.username
+      }
     }
   end
 
