@@ -14,6 +14,7 @@ defmodule CloudCogs.Router do
     scope "/v1" do
       resources "/users", UserController, only: [:create]
       post "/sessions", SessionController, :create
+      get "/current_user", CurrentUserController, :show
     end
   end
 end
