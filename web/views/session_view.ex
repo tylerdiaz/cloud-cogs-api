@@ -1,10 +1,6 @@
 defmodule CloudCogs.SessionView do
   use CloudCogs.Web, :view
 
-  def render("show.json", %{user: user}) do
-    user
-  end
-
   def render("show.json", %{jwt: jwt, user: user}) do
     %{
       user: %{
