@@ -10,7 +10,7 @@ defmodule CloudCogs.CurrentUserController do
 
     conn
     |> put_status(:ok)
-    |> render(CloudCogs.SessionView, :show, user: user)
+    |> render(CloudCogs.SessionView, :show, jwt: Guardian.Plug.current_token(conn), user: user)
   end
 
   def unauthenticated(conn, _params) do
