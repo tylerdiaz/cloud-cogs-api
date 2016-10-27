@@ -1,0 +1,92 @@
+# Defaults:
+  # cause_type: actionable
+  # name: Parent name + action label
+  # location_id: Parent location
+# Special params:
+  # setEventTo will append it as an effect with the corresponding model-id
+  # setLocationTo will append it as an effect with the corresponding model-id
+
+---
+locations:
+  - name: The Bedroom
+    image: /images/locations/sleeping_quarters.jpg
+  - name: Red Room
+    image: /images/locations/red_room.jpg
+  - name: Blue Room
+    image: /images/locations/blue_room.jpg
+
+events:
+  # this is necessary to kick-start the trigger effects and narrative
+  # START gets auto-run
+  # - name: START
+  #   setLocationTo: The Bedroom
+  #   cause_type: actionable
+
+  # The Bedroom
+  - name: The beginning
+    cause_type: trigger
+    location: The Bedroom
+    perishable: true
+    narrative:
+    - Something happens
+    - You wake up
+    - What do you do?
+
+  - name: The treasure
+    location: The Bedroom
+    action_label: Open suspicious treasure
+    perishable: true
+    narratives:
+    - The treasure gave you 500 credits
+    effects:
+    - key: addCredits
+      payload:
+        quantity: 500
+
+  - action_label: Enter red room
+    location: The Bedroom
+    setLocationTo: Red Room
+    narratives:
+    - The room is empty
+
+  - action_label: Enter blue room
+    location: The Bedroom
+    setLocationTo: Blue Room
+    narratives:
+    - This room is blue
+    - An entrance to a green room
+    - It costs 500 credits to enter
+
+  # Red Room events
+  - name: In the Red Room
+    setLocationTo: The Bedroom
+    cause_type: trigger
+    location: Red Room
+    action_label: Return to bedroom
+    narratives:
+    - The red of the room flashes in your sight
+
+  # Blue Room events
+  - name: Back to Bedroom
+    action_label: Go back
+    location: Blue Room
+    narratives:
+    - Wonder what was beyond that room...
+    setEventTo: The beginning
+
+  - name: Into the Green Room
+    action_label: Pay to enter
+    location: Blue Room
+    narratives:
+    - The payment is given
+    - End of the road.
+    - Till next time.
+    visible_on_failing_conditions: true
+    conditions:
+    - key: hasCredits
+      payload:
+        quantity: 500
+    effects:
+    - key: removeCredits
+      payload:
+        quantity: 500
