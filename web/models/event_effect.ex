@@ -2,7 +2,7 @@ defmodule CloudCogs.EventEffect do
   use CloudCogs.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
-  schema "eventeffects" do
+  schema "event_effects" do
     field :key, :string
     field :payload, :map
     belongs_to :event, CloudCogs.Event, type: Ecto.UUID

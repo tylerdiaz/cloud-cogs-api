@@ -2,7 +2,7 @@ defmodule CloudCogs.Repo.Migrations.CreateEventCondition do
   use Ecto.Migration
 
   def change do
-    create table(:eventconditions, primary_key: false) do
+    create table(:event_conditions, primary_key: false) do
       add :id, :binary_id, primary_key: true
       add :key, :string
       add :payload, :map
