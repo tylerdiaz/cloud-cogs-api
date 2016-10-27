@@ -1,5 +1,3 @@
-require IEx
-
 defmodule CloudCogs.CurrentUserController do
   use CloudCogs.Web, :controller
 

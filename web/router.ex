@@ -15,6 +15,8 @@ defmodule CloudCogs.Router do
       resources "/users", UserController, only: [:create]
       post "/sessions", SessionController, :create
       get "/current_user", CurrentUserController, :show
+      get "/current_event", EventController, :current_event
+      post "/act_on_event", EventController, :act_on_event
     end
   end
 end
