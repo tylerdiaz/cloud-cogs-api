@@ -9,6 +9,8 @@ defmodule CloudCogs.User do
     field :encrypted_password, :string
     field :password, :string, virtual: true
 
+    has_one :character, Character, foreign_key: :user_id
+
     timestamps()
   end
 
