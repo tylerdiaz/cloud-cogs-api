@@ -1,5 +1,13 @@
+defmodule CloudCogs.DisabledEvent do
+  use Ecto.Schema
+
+  embedded_schema do
+    field :action_label, :string
+  end
+end
+
 defmodule CloudCogs.Event do
-  alias CloudCogs.Event
+  alias CloudCogs.{Event, DisabledEvent}
   use CloudCogs.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -19,13 +27,13 @@ defmodule CloudCogs.Event do
     timestamps()
   end
 
-  @doc """
-  Builds a changeset based on the `struct` and `params`.
-  """
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :cause_type, :visible_on_failing_conditions])
     |> validate_required([:name, :cause_type ])
   end
 
+
+  def disabled?(%Event{}), do: false
+  def disabled?(%DisabledEvent{}), do: true
 end

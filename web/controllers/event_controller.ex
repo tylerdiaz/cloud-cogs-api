@@ -3,7 +3,7 @@
 
 require IEx
 
-alias CloudCogs.{Character, Event, Repo, ConditionChecker, EventOptions, CharacterLocationNarrative, EffectRunner}
+alias CloudCogs.{Character, DisabledEvent, Event, Repo, ConditionChecker, EventOptions, CharacterLocationNarrative, EffectRunner}
 
 # Code debt relief:
 # - Make a struct to replace maps inside the "resource" param for conditionChecker/eventRunner
@@ -36,6 +36,7 @@ defmodule CloudCogs.EventController do
     |> Enum.filter(fn (event) -> event.cause_type == "actionable" end)
     |> Enum.map(&EventOptions.get_options_for(&1, character))
     |> Enum.reject(fn (v) -> v == nil end)
+    |> Enum.map(&EventOptions.format_option(&1))
 
     conn
     |> render(:event, narrative: location_narrative, options: options)
@@ -65,34 +66,25 @@ end
 
 defmodule CloudCogs.EventOptions do
   def get_options_for(event, character) do
-    if Enum.empty?(event.conditions) do
-      format_event(event)
-    else
-      is_actionable = ConditionChecker.event_conditions_met?(
-        event,
-        %{ character: Map.delete(character, :event) }
-      )
+    is_actionable = ConditionChecker.event_conditions_met?(
+      event,
+      %{ character: character }
+    )
 
-      cond do
-        is_actionable -> format_event(event)
-        event.visible_on_failing_conditions -> format_event(event, %{ disabled: true })
-        true -> nil
-      end
+    cond do
+      is_actionable -> event
+      event.visible_on_failing_conditions -> %DisabledEvent{ action_label: event.action_label }
+      true -> nil
     end
   end
 
   # Split this out into a "decorator"
-  @event_format_defaults %{disabled: false}
-
-  def format_event(event) do
-    %{label: event.action_label, disabled: false, event_id: event.id}
-    |> Map.merge(@event_format_defaults)
-  end
-
-  def format_event(event, attrs) do
-    %{label: event.action_label, event_id: event.id}
-    |> Map.merge(@event_format_defaults)
-    |> Map.merge(attrs)
+  def format_option(event) do
+    if Event.disabled?(event) do
+      %{label: event.action_label, disabled: true }
+    else
+      %{label: event.action_label, disabled: false, event_id: event.id}
+    end
   end
 end
 
