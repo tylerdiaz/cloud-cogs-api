@@ -6,6 +6,7 @@ defmodule CloudCogs.Location do
     field :name, :string
     field :image, :string
     belongs_to :parent, CloudCogs.Location
+    has_many :events, CloudCogs.Event, foreign_key: :location_id
 
     timestamps()
   end
