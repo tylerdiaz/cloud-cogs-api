@@ -7,7 +7,7 @@ defmodule CloudCogs.DisabledEvent do
 end
 
 defmodule CloudCogs.Event do
-  alias CloudCogs.{Event, DisabledEvent}
+  alias CloudCogs.{Event, DisabledEvent, Repo, CharacterEventLogs}
   use CloudCogs.Web, :model
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -15,6 +15,7 @@ defmodule CloudCogs.Event do
     field :name, :string
     field :action_label, :string
     field :cause_type, :string
+    field :perishable, :boolean, default: false
     field :visible_on_failing_conditions, :boolean, default: false
 
     has_many :children, Event, foreign_key: :parent_id
@@ -30,10 +31,23 @@ defmodule CloudCogs.Event do
   def changeset(struct, params \\ %{}) do
     struct
     |> cast(params, [:name, :cause_type, :visible_on_failing_conditions])
-    |> validate_required([:name, :cause_type ])
+    |> validate_required([:name, :cause_type])
   end
 
+  def perished?(event, character) do
+    # BUG: trigger events happen multiple times
+    if event.perishable do
+      event_log = CharacterEventLogs
+      |> where(character_id: ^character.id, event_id: ^event.id)
+      |> Repo.all
+
+      !Enum.empty?(event_log)
+    else
+      false
+    end
+  end
 
   def disabled?(%Event{}), do: false
   def disabled?(%DisabledEvent{}), do: true
 end
+

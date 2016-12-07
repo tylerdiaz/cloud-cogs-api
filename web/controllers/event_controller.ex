@@ -1,15 +1,10 @@
-# things left:
-# - act on an event
-
-require IEx
-
-alias CloudCogs.{Character, DisabledEvent, Event, Repo, ConditionChecker, EventOptions, CharacterLocationNarrative, EffectRunner}
+alias CloudCogs.{Character, DisabledEvent, Event, Repo, ConditionChecker, EventOptions, CharacterLocationNarrative, CharacterEventLogs, EffectRunner}
 
 # Code debt relief:
-# - Make a struct to replace maps inside the "resource" param for conditionChecker/eventRunner
-# - Create event decorator
 # - add a plug for user/character loading
 # - maybe a debugging tool that shows me all queries run and their time to execute
+# - modifying event_id/location_id directly. should I be doing this?
+# - better error handling when you're performing an event you shouldn't be
 
 defmodule CloudCogs.EventController do
   use CloudCogs.Web, :controller
@@ -23,19 +18,12 @@ defmodule CloudCogs.EventController do
     |> Repo.preload(event: [:conditions, :children])
     |> Repo.preload(location: [:events])
 
-    # BUG: Need to pass this with a query or where scope maybe
-    location_narrative = Repo.all(
-      CharacterLocationNarrative
-      # character_id: character.id,
-      # location_id: character.location.id
-    )
+    location_narrative = CharacterLocationNarrative
+    |> where(character_id: ^character.id, location_id: ^character.location.id)
+    |> Repo.all
     |> Enum.map(fn (e) -> e.narrative_text end)
 
-    options = Enum.concat(character.location.events, character.event.children)
-    |> Repo.preload(:conditions)
-    |> Enum.filter(fn (event) -> event.cause_type == "actionable" end)
-    |> Enum.map(&EventOptions.get_options_for(&1, character))
-    |> Enum.reject(fn (v) -> v == nil end)
+    options = event_options(character)
     |> Enum.map(&EventOptions.format_option(&1))
 
     conn
@@ -48,19 +36,32 @@ defmodule CloudCogs.EventController do
     |> Repo.preload(event: [:conditions, :children])
     |> Repo.preload(location: [:events])
 
-    acted_event = Repo.get_by(CloudCogs.Event, id: event_id)
-    |> Repo.preload(:effects)
-    |> EffectRunner.run_all_event_effects(%{ character: character })
+    acted_event = event_options(character)
+    |> Enum.find(fn (e) -> e.id == event_id end)
 
-    # might make more sense to have trigger events be location independent and add that as a condition if necessary
-    # in which case this query becomes a little trickier
+    if !Event.perished?(acted_event, character) do
+      EffectRunner.run_all_event_effects(acted_event, %{ character: character })
+    end
+
+    Repo.insert!(%CharacterEventLogs{ event_id: event_id, character_id: character.id })
+
     trigger_events = Enum.concat(character.location.events, character.event.children)
     |> Repo.preload([:effects, :conditions])
     |> Enum.filter(fn (event) -> event.cause_type == "trigger" end)
     |> Enum.filter(&ConditionChecker.event_conditions_met?(&1, %{ character: character }))
-    |> Enum.map(&EffectRunner.run_all_event_effects(&1, %{ character: character }))
+    |> Enum.reject(&Event.perished?(&1, character))
+    |> Enum.each(&EffectRunner.run_all_event_effects(&1, %{ character: character }))
 
     current_event(conn, %{})
+  end
+
+  def event_options(character) do
+    Enum.concat(character.location.events, character.event.children)
+    |> Repo.preload([:conditions, :effects])
+    |> Enum.filter(fn (event) -> event.cause_type == "actionable" end)
+    |> Enum.map(&EventOptions.get_options_for(&1, character))
+    |> Enum.reject(fn (v) -> v == nil end)
+    |> Enum.reject(&Event.perished?(&1, character))
   end
 end
 
@@ -89,16 +90,14 @@ defmodule CloudCogs.EventOptions do
 end
 
 defmodule CloudCogs.ConditionChecker do
-  # I'd love to do this I just can't figure out how right now, something like specter for Elixir would be nice
-  # @resource_requirement_schema = %{
-  # TODO: can I just append a "resource" param instead here? passing character all around feels kinda dirty
-  #   hasCredits: %{ character: [:credits] }
-  # }
-
-  def event_conditions_met?(event, %{ character: character }) do
+  def event_conditions_met?(event, resources) do
     event.conditions
     |> Enum.all?(fn (con) ->
-      ConditionChecker.check(con.key, con.payload, character)
+      ConditionChecker.check(
+        con.key,
+        con.payload,
+        resources.character
+      )
     end)
   end
 
@@ -108,42 +107,42 @@ defmodule CloudCogs.ConditionChecker do
 end
 
 defmodule CloudCogs.EffectRunner do
-  # TODO: also having string/atom key pattern matching feels dirty. move those to a struct instead.
-  def run_all_event_effects(%{ effects: effects }, %{ character: character }) do
-    effects
+  def run_all_event_effects(event, %{ character: character }) do
+    event.effects
     |> Enum.each(fn (effect) ->
-      perform_effect(effect.key, effect.payload, character)
+      perform_effect(effect.key, effect.payload, %{ character: character, event: event })
     end)
   end
 
-  def perform_effect("setLocationTo", %{ model_id: model_id }, character) do
+  def perform_effect("setLocationTo", %{ model_id: model_id }, %{ character: character }) do
     update_character(character, :location_id, model_id)
   end
 
-  def perform_effect("setEventTo", %{ model_id: model_id }, character) do
+  def perform_effect("setEventTo", %{ model_id: model_id }, %{ character: character }) do
     update_character(character, :event_id, model_id)
   end
 
-  def perform_effect("narratives", %{ narrative: narratives }, character) do
+  def perform_effect("narratives", %{ narrative: narratives }, %{ character: character, event: event }) do
     narratives |>
       Enum.map(fn (narrative_text) ->
         %CharacterLocationNarrative{
           character_id: character.id,
-          location_id: character.location.id,
+          location_id: event.location_id,
           narrative_text: narrative_text
     }
     end)
     |> Enum.each(&Repo.insert!(&1))
   end
 
-  def perform_effect("addCredits", %{ quantity: credits }, character) do
+  def perform_effect("removeCredits", %{ quantity: credits }, %{ character: character }) do
+    update_character(character, :credits, (character.credits - credits))
+  end
+
+  def perform_effect("addCredits", %{ quantity: credits }, %{ character: character }) do
     update_character(character, :credits, (character.credits + credits))
   end
 
-  # BUG: this update isn't working
-  # might be better to do something like update_where
   defp update_character(character, key, val) do
-    Character.changeset(character, %{ key: val })
-    |> Repo.update!
+    Character.changeset(character, %{ key => val }) |> Repo.update!
   end
 end

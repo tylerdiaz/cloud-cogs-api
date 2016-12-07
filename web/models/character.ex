@@ -17,7 +17,7 @@ defmodule CloudCogs.Character do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:credits, :energy, :max_energy])
+    |> cast(params, [:credits, :energy, :event_id, :location_id, :max_energy])
     |> validate_required([:credits, :energy, :max_energy])
   end
 end

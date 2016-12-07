@@ -45,7 +45,7 @@ defmodule GameStateHydrator do
     parent_event = %Event{
       name: Map.get(event, "name", "Untitled event"),
       cause_type: Map.get(event, "cause_type", "actionable"),
-      # perishable: Map.get(event, "perishable", false),
+      perishable: Map.get(event, "perishable", false),
       action_label: Map.get(event, "action_label", "Go"),
       location_id: Repo.get_by(Location, name: event["location"]).id,
       effects: event_effects(event),

@@ -22,12 +22,22 @@ events:
   #   setLocationTo: The Bedroom
   #   cause_type: actionable
 
+
   # The Bedroom
+  # - name: The end
+  #   cause_type: trigger
+  #   location: The Bedroom
+  #   perishable: true
+  #   narratives:
+  #   - Something happens
+  #   - You wake up
+  #   - What do you do?
+
   - name: The beginning
     cause_type: trigger
     location: The Bedroom
     perishable: true
-    narrative:
+    narratives:
     - Something happens
     - You wake up
     - What do you do?
@@ -46,8 +56,6 @@ events:
   - action_label: Enter red room
     location: The Bedroom
     setLocationTo: Red Room
-    narratives:
-    - The room is empty
 
   - action_label: Enter blue room
     location: The Bedroom
@@ -60,27 +68,23 @@ events:
   # Red Room events
   - name: In the Red Room
     setLocationTo: The Bedroom
-    cause_type: trigger
     location: Red Room
     action_label: Return to bedroom
     narratives:
-    - The red of the room flashes in your sight
+    - The room is empty
 
   # Blue Room events
   - name: Back to Bedroom
     action_label: Go back
     location: Blue Room
+    setLocationTo: The Bedroom
     narratives:
     - Wonder what was beyond that room...
-    setEventTo: The beginning
 
   - name: Into the Green Room
     action_label: Pay to enter
     location: Blue Room
-    narratives:
-    - The payment is given
-    - End of the road.
-    - Till next time.
+    setLocationTo: The Bedroom
     visible_on_failing_conditions: true
     conditions:
     - key: hasCredits
